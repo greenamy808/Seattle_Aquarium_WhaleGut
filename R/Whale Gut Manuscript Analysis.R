@@ -37,7 +37,8 @@ here()
 #all data in one file (P, N, A, B, C, D)
 original.data <- read_csv(here("data", "All PIP Data.csv"))
 
-
+#remove added last column
+original.data <- original.data[-c(28)]
 
 ## clean data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 data <- original.data
@@ -51,12 +52,6 @@ names(data) [19] <- "Energy.Break"
 
 
 str(data)
-
-
-usethis::create_from_github(
-  "https://github.com/greenamy808/Seattle_Aquarium_WhaleGut.git",
-  destdir = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/"
-)
 
 
 
@@ -120,221 +115,536 @@ t.3
 # A only
 #####
 
+#all data
 dat.A <- data %>%
   filter(PIP.Number == "A")
 
+#remove time 0
+dat.A.2 <- dat.A %>%
+  filter(Time != 0)
+
+#calculate time 0 mean
+dat.A %>%
+  filter(Time == 0) %>%
+  filter(Pre.Post == "Pre") %>%
+  select(Weight, Yield.Elongation, Yield.Stress, Resistance.1k) %>%
+  summarize_at(c('Weight', 'Yield.Elongation', 'Yield.Stress', 'Resistance.1k'), mean)
+
+#####
 #mass
-#three way anova
-dat.A.mass <- dat.A %>%
+#####
+
+#select data
+dat.A.mass <- dat.A.2 %>%
   select(Time, Pre.Post, Depth, Weight)
 
-A.mass.aov <- aov(Weight ~ Depth * Time * Pre.Post, data = dat.A.mass)
+#normalize by dividing all by time 0 mean 0.723
+dat.A.mass <- dat.A.mass %>%
+  mutate(NWeight = Weight/0.723)
+
+#three way anova
+A.mass.aov <- aov(NWeight ~ Depth * Time * Pre.Post, data = dat.A.mass)
 summary(A.mass.aov)
 
-#tukeys post hoc test
-TukeyHSD(A.mass.aov, conf.level = 0.95)
-#only shows Pre.Post and not significant
 
-#one way anova
-A.depth.aov <- aov(Weight ~ Depth, data = dat.A.mass)
-summary(A.depth.aov)
+#####
+#Yield.Elongation
+#####
+dat.A.Elon <- dat.A.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Elongation)
 
-#bonferroni post hoc
-pairwise.t.test(dat.A.mass$Weight, dat.A.mass$Depth, p.adj = 'bonferroni')
+#normalize by dividing all by time 0 mean 1.7
+dat.A.Elon <- dat.A.Elon %>%
+  mutate(NElon = Yield.Elongation/1.7)
 
-#energy.break
-dat.A.energy <- dat.A %>%
-  select(Time, Pre.Post, Depth, Energy.Break)
-
-A.energy.aov <- aov(Energy.Break ~ Depth * Time * Pre.Post, data = dat.A.energy)
-summary(A.energy.aov)
-
-#bonferroni post hoc
-pairwise.t.test(dat.A.energy$Energy.Break, dat.A.energy$Time, p.adj = 'bonferroni')
+#three way anova
+A.Elon.aov <- aov(NElon ~ Depth * Time * Pre.Post, data = dat.A.Elon)
+summary(A.Elon.aov)
 
 
+#####
+#Yield.Stress
+#####
+dat.A.Stress <- dat.A.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Stress)
+
+#normalize by dividing all by time 0 mean 4.12
+dat.A.Stress <- dat.A.Stress %>%
+  mutate(NStress = Yield.Stress/4.12)
+
+#three way anova
+A.Stress.aov <- aov(Yield.Stress ~ Depth * Time * Pre.Post, data = dat.A.Stress)
+summary(A.Stress.aov)
+
+
+#####
 #electrical, select only one frequency (1000 Hz)
-dat.A.elec <- dat.A %>%
+#####
+dat.A.elec <- dat.A.2 %>%
   select(Time, Pre.Post, Depth, Resistance.1k)
 
+#normalize by dividing all by time 0 mean 21
+dat.A.elec <- dat.A.elec %>%
+  mutate(NElec = Resistance.1k/21)
+
+#three way anova
 A.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.A.elec)
 summary(A.elec.aov)
 
 
-#bonferroni post hoc
-pairwise.t.test(dat.A.elec$Resistance.1k, dat.A.elec$Time, p.adj = 'bonferroni')
 
-pairwise.t.test(dat.A.elec$Resistance.1k, dat.A.elec$Depth, p.adj = 'bonferroni')
+
+
+
 
 #####
 # B only
 #####
 
+#all data
 dat.B <- data %>%
   filter(PIP.Number == "B")
 
+#remove time 0
+dat.B.2 <- dat.B %>%
+  filter(Time != 0)
+
+#calculate time 0 mean
+dat.B %>%
+  filter(Time == 0) %>%
+  filter(Pre.Post == "Pre") %>%
+  select(Weight, Yield.Elongation, Yield.Stress, Resistance.1k) %>%
+  summarize_at(c('Weight', 'Yield.Elongation', 'Yield.Stress', 'Resistance.1k'), mean)
+
+#####
 #mass
-dat.B.mass <- dat.B %>%
+#####
+
+#select data
+dat.B.mass <- dat.B.2 %>%
   select(Time, Pre.Post, Depth, Weight)
 
-B.mass.aov <- aov(Weight ~ Depth * Time * Pre.Post, data = dat.B.mass)
+#normalize by dividing all by time 0 mean 0.422
+dat.B.mass <- dat.B.mass %>%
+  mutate(NWeight = Weight/0.422)
+
+#three way anova
+B.mass.aov <- aov(NWeight ~ Depth * Time * Pre.Post, data = dat.B.mass)
 summary(B.mass.aov)
 
 
-#energy.break
-dat.B.energy <- dat.B %>%
-  select(Time, Pre.Post, Depth, Energy.Break)
+#####
+#Yield.Elongation
+#####
+dat.B.Elon <- dat.B.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Elongation)
 
-B.energy.aov <- aov(Energy.Break ~ Depth * Time * Pre.Post, data = dat.B.energy)
-summary(B.energy.aov)
+#normalize by dividing all by time 0 mean 2.03
+dat.B.Elon <- dat.B.Elon %>%
+  mutate(NElon = Yield.Elongation/2.03)
+
+#three way anova
+B.Elon.aov <- aov(NElon ~ Depth * Time * Pre.Post, data = dat.B.Elon)
+summary(B.Elon.aov)
 
 
+#####
+#Yield.Stress
+#####
+dat.B.Stress <- dat.B.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Stress)
+
+#normalize by dividing all by time 0 mean 5.44
+dat.B.Stress <- dat.B.Stress %>%
+  mutate(NStress = Yield.Stress/5.44)
+
+#three way anova
+B.Stress.aov <- aov(Yield.Stress ~ Depth * Time * Pre.Post, data = dat.B.Stress)
+summary(B.Stress.aov)
+
+
+#####
 #electrical, select only one frequency (1000 Hz)
-dat.B.elec <- dat.B %>%
+#####
+dat.B.elec <- dat.B.2 %>%
   select(Time, Pre.Post, Depth, Resistance.1k)
 
+#normalize by dividing all by time 0 mean 10.6
+dat.B.elec <- dat.B.elec %>%
+  mutate(NElec = Resistance.1k/10.6)
+
+#three way anova
 B.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.B.elec)
 summary(B.elec.aov)
 
 
-pairwise.t.test(dat.B.elec$Resistance.1k, dat.B.elec$Depth, p.adj = 'bonferroni')
 
 
-pairwise.t.test(dat.B.elec$Resistance.1k, dat.B.elec$Time, p.adj = 'bonferroni')
 
 #####
 # C only
 #####
 
+#all data
 dat.C <- data %>%
   filter(PIP.Number == "C")
 
+#remove time 0
+dat.C.2 <- dat.C %>%
+  filter(Time != 0)
+
+#calculate time 0 mean
+dat.C %>%
+  filter(Time == 0) %>%
+  filter(Pre.Post == "Pre") %>%
+  select(Weight, Yield.Elongation, Yield.Stress, Resistance.1k) %>%
+  summarize_at(c('Weight', 'Yield.Elongation', 'Yield.Stress', 'Resistance.1k'), mean)
+
+#####
 #mass
-dat.C.mass <- dat.C %>%
+#####
+
+#select data
+dat.C.mass <- dat.C.2 %>%
   select(Time, Pre.Post, Depth, Weight)
 
-C.mass.aov <- aov(Weight ~ Depth * Time * Pre.Post, data = dat.C.mass)
+#normalize by dividing all by time 0 mean 0.116
+dat.C.mass <- dat.C.mass %>%
+  mutate(NWeight = Weight/0.116)
+
+#three way anova
+C.mass.aov <- aov(NWeight ~ Depth * Time * Pre.Post, data = dat.C.mass)
 summary(C.mass.aov)
 
 
-#energy.break
-dat.C.energy <- dat.C %>%
-  select(Time, Pre.Post, Depth, Energy.Break)
+#####
+#Yield.Elongation
+#####
+dat.C.Elon <- dat.C.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Elongation)
 
-C.energy.aov <- aov(Energy.Break ~ Depth * Time * Pre.Post, data = dat.C.energy)
-summary(C.energy.aov)
+#normalize by dividing all by time 0 mean 3.24
+dat.C.Elon <- dat.C.Elon %>%
+  mutate(NElon = Yield.Elongation/3.24)
+
+#three way anova
+C.Elon.aov <- aov(NElon ~ Depth * Time * Pre.Post, data = dat.C.Elon)
+summary(C.Elon.aov)
 
 
-pairwise.t.test(dat.C.energy$Energy.Break, dat.C.energy$Depth, p.adj = 'bonferroni')
+#####
+#Yield.Stress
+#####
+dat.C.Stress <- dat.C.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Stress)
+
+#normalize by dividing all by time 0 mean 18.9
+dat.C.Stress <- dat.C.Stress %>%
+  mutate(NStress = Yield.Stress/18.9)
+
+#three way anova
+C.Stress.aov <- aov(Yield.Stress ~ Depth * Time * Pre.Post, data = dat.C.Stress)
+summary(C.Stress.aov)
 
 
+#####
 #electrical, select only one frequency (1000 Hz)
-dat.C.elec <- dat.C %>%
+#####
+dat.C.elec <- dat.C.2 %>%
   select(Time, Pre.Post, Depth, Resistance.1k)
 
+#normalize by dividing all by time 0 mean 20.7
+dat.C.elec <- dat.C.elec %>%
+  mutate(NElec = Resistance.1k/20.7)
+
+#three way anova
 C.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.C.elec)
 summary(C.elec.aov)
 
-#bonferroni post hoc
-pairwise.t.test(dat.C.elec$Resistance.1k, dat.C.elec$Depth, p.adj = 'bonferroni')
 
 
-pairwise.t.test(dat.C.elec$Resistance.1k, dat.C.elec$Time, p.adj = 'bonferroni')
+
 
 #####
 # D only
 #####
 
+#all data
 dat.D <- data %>%
   filter(PIP.Number == "D")
 
+#remove time 0
+dat.D.2 <- dat.D %>%
+  filter(Time != 0)
+
+#calculate time 0 mean
+dat.D %>%
+  filter(Time == 0) %>%
+  filter(Pre.Post == "Pre") %>%
+  select(Weight, Yield.Elongation, Yield.Stress, Resistance.1k) %>%
+  summarize_at(c('Weight', 'Yield.Elongation', 'Yield.Stress', 'Resistance.1k'), mean)
+
+#####
 #mass
-dat.D.mass <- dat.D %>%
+#####
+
+#select data
+dat.D.mass <- dat.D.2 %>%
   select(Time, Pre.Post, Depth, Weight)
 
-D.mass.aov <- aov(Weight ~ Depth * Time * Pre.Post, data = dat.D.mass)
+#normalize by dividing all by time 0 mean 0.498
+dat.D.mass <- dat.D.mass %>%
+  mutate(NWeight = Weight/0.498)
+
+#three way anova
+D.mass.aov <- aov(NWeight ~ Depth * Time * Pre.Post, data = dat.D.mass)
 summary(D.mass.aov)
 
-pairwise.t.test(dat.D.mass$Weight, dat.D.mass$Depth, p.adj = 'bonferroni')
+
+#####
+#Yield.Elongation
+#####
+dat.D.Elon <- dat.D.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Elongation)
+
+#normalize by dividing all by time 0 mean 2.47
+dat.D.Elon <- dat.D.Elon %>%
+  mutate(NElon = Yield.Elongation/2.47)
+
+#three way anova
+D.Elon.aov <- aov(NElon ~ Depth * Time * Pre.Post, data = dat.D.Elon)
+summary(D.Elon.aov)
 
 
+#####
+#Yield.Stress
+#####
+dat.D.Stress <- dat.D.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Stress)
 
-#energy.break
-dat.D.energy <- dat.D %>%
-  select(Time, Pre.Post, Depth, Energy.Break)
+#normalize by dividing all by time 0 mean 4.01
+dat.D.Stress <- dat.D.Stress %>%
+  mutate(NStress = Yield.Stress/4.01)
 
-D.energy.aov <- aov(Energy.Break ~ Depth * Time * Pre.Post, data = dat.D.energy)
-summary(D.energy.aov)
+#three way anova
+D.Stress.aov <- aov(Yield.Stress ~ Depth * Time * Pre.Post, data = dat.D.Stress)
+summary(D.Stress.aov)
 
 
-
+#####
 #electrical, select only one frequency (1000 Hz)
-dat.D.elec <- dat.D %>%
+#####
+dat.D.elec <- dat.D.2 %>%
   select(Time, Pre.Post, Depth, Resistance.1k)
 
+#normalize by dividing all by time 0 mean 20
+dat.D.elec <- dat.D.elec %>%
+  mutate(NElec = Resistance.1k/20)
+
+#three way anova
 D.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.D.elec)
 summary(D.elec.aov)
 
 
-pairwise.t.test(dat.D.elec$Resistance.1k, dat.D.elec$Depth, p.adj = 'bonferroni')
-
-pairwise.t.test(dat.D.elec$Resistance.1k, dat.D.elec$Time, p.adj = 'bonferroni')
-
-pairwise.t.test(dat.D.elec$Resistance.1k, dat.D.elec$Pre.Post, p.adj = 'bonferroni')
 
 
 #####
 # N only
 #####
 
+#all data
 dat.N <- data %>%
   filter(PIP.Number == "N")
 
+#remove time 0
+dat.N.2 <- dat.N %>%
+  filter(Time != 0)
+
+#calculate time 0 mean
+dat.N %>%
+  filter(Time == 0) %>%
+  filter(Pre.Post == "Pre") %>%
+  select(Weight, Yield.Elongation, Yield.Stress, Resistance.1k) %>%
+  summarize_at(c('Weight', 'Yield.Elongation', 'Yield.Stress', 'Resistance.1k'), mean)
+
+#####
 #mass
-#three way anova
-dat.N.mass <- dat.N %>%
+#####
+
+#select data
+dat.N.mass <- dat.N.2 %>%
   select(Time, Pre.Post, Depth, Weight)
 
-N.mass.aov <- aov(Weight ~ Depth * Time * Pre.Post, data = dat.N.mass)
+#normalize by dividing all by time 0 mean 0.754
+dat.N.mass <- dat.N.mass %>%
+  mutate(NWeight = Weight/0.754)
+
+#three way anova
+N.mass.aov <- aov(NWeight ~ Depth * Time * Pre.Post, data = dat.N.mass)
 summary(N.mass.aov)
 
 
+#####
+#Yield.Elongation
+#####
+dat.N.Elon <- dat.N.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Elongation)
 
-#energy.break
-dat.N.energy <- dat.N %>%
-  select(Time, Pre.Post, Depth, Energy.Break)
+#normalize by dividing all by time 0 SINGLE SAMPLE 1.38
+dat.N.Elon <- dat.N.Elon %>%
+  mutate(NElon = Yield.Elongation/1.38)
 
-N.energy.aov <- aov(Energy.Break ~ Depth * Time * Pre.Post, data = dat.N.energy)
-summary(N.energy.aov)
-
-
-pairwise.t.test(dat.N.energy$Energy.Break, dat.N.energy$Time, p.adj = 'bonferroni')
+#three way anova
+N.Elon.aov <- aov(NElon ~ Depth * Time * Pre.Post, data = dat.N.Elon)
+summary(N.Elon.aov)
 
 
+#####
+#Yield.Stress
+#####
+dat.N.Stress <- dat.N.2 %>%
+  select(Time, Pre.Post, Depth, Yield.Stress)
+
+#normalize by dividing all by time 0 SINGLE SAMPLE 3.47
+dat.N.Stress <- dat.N.Stress %>%
+  mutate(NStress = Yield.Stress/3.47)
+
+#three way anova
+N.Stress.aov <- aov(Yield.Stress ~ Depth * Time * Pre.Post, data = dat.N.Stress)
+summary(N.Stress.aov)
+
+
+#####
 #electrical, select only one frequency (1000 Hz)
-dat.A.elec <- dat.A %>%
+#####
+dat.N.elec <- dat.N.2 %>%
   select(Time, Pre.Post, Depth, Resistance.1k)
 
-A.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.A.elec)
-summary(A.elec.aov)
+#normalize by dividing all by time 0 mean 23.5
+dat.N.elec <- dat.N.elec %>%
+  mutate(NElec = Resistance.1k/23.5)
 
-
-pairwise.t.test(dat.A.elec$Resistance.1k, dat.A.elec$Time, p.adj = 'bonferroni')
-
-
-
-
-
-
-#tests for normality
-plot(D.mass.aov, which = 2)
-hist(D.mass.aov$residuals)
-shapiro.test(D.mass.aov$residuals)
+#three way anova
+N.elec.aov <- aov(Resistance.1k ~ Depth * Time * Pre.Post, data = dat.N.elec)
+summary(N.elec.aov)
 
 
 
 
+##########################################
+#add all ratio values into one table
+##########################################
+
+#####
+#A
+#####
+A.ratios <- cbind(dat.A.2$Time, dat.A.2$Pre.Post, dat.A.2$Depth, dat.A.mass$NWeight, dat.A.Elon$NElon, dat.A.Stress$NStress, dat.A.elec$NElec)
+colnames(A.ratios) = c("Time", "Pre.Post", "Depth", "Weight", "Yield.Elongation", "Yield.Stress", "Resistance.1k")
+
+
+#turn to numeric data
+A.ratios <- transform(A.ratios, Weight = as.numeric(Weight),
+          Yield.Elongation = as.numeric(Yield.Elongation),
+          Yield.Stress = as.numeric(Yield.Stress),
+          Resistance.1k = as.numeric(Resistance.1k))
+
+
+#shorten to 2 decimal places
+A.ratios <- A.ratios %>%
+  mutate_at(vars(Weight, Yield.Elongation, Yield.Stress, Resistance.1k), funs(round(., 1)))
+
+
+#export as csv
+write.table(A.ratios, file = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/Seattle_Aquarium_WhaleGut/output\\A.ratios.csv", sep = ",", row.names = FALSE)
+
+#####
+# B
+####
+B.ratios <- cbind(dat.B.2$Time, dat.B.2$Pre.Post, dat.B.2$Depth, dat.B.mass$NWeight, dat.B.Elon$NElon, dat.B.Stress$NStress, dat.B.elec$NElec)
+colnames(B.ratios) = c("Time", "Pre.Post", "Depth", "Weight", "Yield.Elongation", "Yield.Stress", "Resistance.1k")
+
+
+#turn to numeric data
+B.ratios <- transform(B.ratios, Weight = as.numeric(Weight),
+                      Yield.Elongation = as.numeric(Yield.Elongation),
+                      Yield.Stress = as.numeric(Yield.Stress),
+                      Resistance.1k = as.numeric(Resistance.1k))
+
+
+#shorten to 2 decimal places
+B.ratios <- B.ratios %>%
+  mutate_at(vars(Weight, Yield.Elongation, Yield.Stress, Resistance.1k), funs(round(., 1)))
+
+
+#export as csv
+write.table(B.ratios, file = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/Seattle_Aquarium_WhaleGut/output\\B.ratios.csv", sep = ",", row.names = FALSE)
+
+
+#####
+# C
+####
+C.ratios <- cbind(dat.C.2$Time, dat.C.2$Pre.Post, dat.C.2$Depth, dat.C.mass$NWeight, dat.C.Elon$NElon, dat.C.Stress$NStress, dat.C.elec$NElec)
+colnames(C.ratios) = c("Time", "Pre.Post", "Depth", "Weight", "Yield.Elongation", "Yield.Stress", "Resistance.1k")
+
+
+#turn to numeric data
+C.ratios <- transform(C.ratios, Weight = as.numeric(Weight),
+                      Yield.Elongation = as.numeric(Yield.Elongation),
+                      Yield.Stress = as.numeric(Yield.Stress),
+                      Resistance.1k = as.numeric(Resistance.1k))
+
+
+#shorten to 2 decimal places
+C.ratios <- C.ratios %>%
+  mutate_at(vars(Weight, Yield.Elongation, Yield.Stress, Resistance.1k), funs(round(., 1)))
+
+
+#export as csv
+write.table(C.ratios, file = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/Seattle_Aquarium_WhaleGut/output\\C.ratios.csv", sep = ",", row.names = FALSE)
 
 
 
+#####
+# D
+####
+D.ratios <- cbind(dat.D.2$Time, dat.D.2$Pre.Post, dat.D.2$Depth, dat.D.mass$NWeight, dat.D.Elon$NElon, dat.D.Stress$NStress, dat.D.elec$NElec)
+colnames(D.ratios) = c("Time", "Pre.Post", "Depth", "Weight", "Yield.Elongation", "Yield.Stress", "Resistance.1k")
 
+
+#turn to numeric data
+D.ratios <- transform(D.ratios, Weight = as.numeric(Weight),
+                      Yield.Elongation = as.numeric(Yield.Elongation),
+                      Yield.Stress = as.numeric(Yield.Stress),
+                      Resistance.1k = as.numeric(Resistance.1k))
+
+
+#shorten to 2 decimal places
+D.ratios <- D.ratios %>%
+  mutate_at(vars(Weight, Yield.Elongation, Yield.Stress, Resistance.1k), funs(round(., 1)))
+
+
+#export as csv
+write.table(D.ratios, file = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/Seattle_Aquarium_WhaleGut/output\\D.ratios.csv", sep = ",", row.names = FALSE)
+
+
+#####
+# N
+####
+N.ratios <- cbind(dat.N.2$Time, dat.N.2$Pre.Post, dat.N.2$Depth, dat.N.mass$NWeight, dat.N.Elon$NElon, dat.N.Stress$NStress, dat.N.elec$NElec)
+colnames(N.ratios) = c("Time", "Pre.Post", "Depth", "Weight", "Yield.Elongation", "Yield.Stress", "Resistance.1k")
+
+
+#turn to numeric data
+N.ratios <- transform(N.ratios, Weight = as.numeric(Weight),
+                      Yield.Elongation = as.numeric(Yield.Elongation),
+                      Yield.Stress = as.numeric(Yield.Stress),
+                      Resistance.1k = as.numeric(Resistance.1k))
+
+
+#shorten to 2 decimal places
+N.ratios <- N.ratios %>%
+  mutate_at(vars(Weight, Yield.Elongation, Yield.Stress, Resistance.1k), funs(round(., 1)))
+
+
+#export as csv
+write.table(N.ratios, file = "C:/Users/olsena/OneDrive - Seattle Aquarium/Clean Seas/PIP/Seattle_Aquarium_WhaleGut/output\\N.ratios.csv", sep = ",", row.names = FALSE)
