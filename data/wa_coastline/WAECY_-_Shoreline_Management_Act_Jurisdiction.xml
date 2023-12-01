@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <descript>
+            <abstract>Ecology created SMA_Jurisdiction_Streams (also known as SMA_Arcs_Adopt) by selecting appropriate flowlines from the National Hydrographic Dataset &amp;quot;NHDFlowline.lyr&amp;quot; as maintained by the Department of Ecology in conjunction with the USGS. This dataset can be used with linear referencing and is synchronized with the latest version of NHD. The original official list of streams that meet the 20 cubic feet per second (cfs) mean annual flow criteria found in state rule at WAC 173-18 HAS BEEN SUPERSEDED by lists contained in Ecology-approved shoreline master programs.Each local government master program shall include a list of streams constituting shorelines of the state within the jurisdiction of the master program that complies with the requirements of RCW 90.58.030 (2)(d). When such master program is approved by the department, subsequent to the effective date of this provision, the list within the master program shall be the official list for that jurisdiction and shall supersede the list contained herein. Streams and rivers west of the Cascades crest with a mean annual flow of 1,000 cfs or greater, and east of the Cascades crest with either a mean annual flow or 200 cfs or more or the portion downstream from the first 300 square miles of drainage areas are classified as shorelines of statewide significance.</abstract>
+            <purpose>Streams and rivers designated "shorelines of the state" adopted by local governments into their shoreline master programs as approved by Ecology.  See Chapter 173-18-044 WAC. http://www.ecy.wa.gov/programs/sea/sma/st_guide/jurisdiction/rivers.html
+</purpose>
+        </descript>
+        <keywords>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>Washington State Department of Ecology</themekey>
+                <themekey> ECY</themekey>
+                <themekey> Shoreline Management Act</themekey>
+                <themekey> SMA</themekey>
+                <themekey> RCW 90.58</themekey>
+                <themekey> Shorelines of the State</themekey>
+                <themekey> Shoreline Master Program</themekey>
+                <themekey> inlandWaters</themekey>
+                <themekey> Chapter 173-18-044 WAC</themekey>
+                <themekey> streams</themekey>
+                <themekey> rivers</themekey>
+                <themekey> lakes</themekey>
+                <themekey> marine</themekey>
+            </theme>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>The Washington State Department of Ecology (Ecology) uses Geographic Information System (GIS) data as an aid in accomplishing its mission of protecting the land, air, and waters of the state. The agency has built this spatial dataset to better describe the diverse natural and cultural environment we live and work in.DisclaimerInformation provided on Ecology's Web sites is accurate to the best of Ecology's knowledge and is subject to change on a regular basis, without notice. Ecology cannot and does not warrant that the information on this Web site is absolutely current, although every effort is made to ensure that it is kept as current as possible. Ecology makes no guarantee or warranty concerning the accuracy of information contained in this spatial dataset. Ecology further makes no warranties, either expressed or implied as to any other matter whatsoever, including, without limitation, the condition of the product, or its fitness for any particular purpose. The burden for determining fitness for use lies entirely with the user. Although these data have been processed successfully on Ecology computers, no warranty, expressed or implied, is made by Ecology regarding the use of these data on any other system, nor does the fact of distribution constitute or imply any such warranty. In no event shall Ecology have any liability whatsoever for payment of any consequential, incidental, indirect, special, or tort damages of any kind, including, but not limited to, any loss of profits arising out of use of or reliance on the geographical data or arising out of the delivery, installation, operation, or support by Ecology. Ecology cannot and does not warrant the accuracy of these documents beyond the source documents, although every attempt is made to work from authoritative sources. Links to related sites are provided as a courtesy, but Ecology is not responsible for their availability, content or policies.Any legal questions regarding this copyright notice and disclaimer, or other questions regarding the use of the Material from Ecology's Web sites, may be directed to Web Communications Manager, Washington State Department of Ecology, PO Box 47600, Olympia, WA 98504-7600, 360-407-6590. The Washington State Department of Ecology reserves the right to change this policy at any time without notice.For further information: https://ecology.wa.gov/About-us/Accountability-transparency/Our-website/Copyright-information</useconst>
+        <datacred>See the National Hydrographic Dataset metadata. SMA_Arcs_Adopt (also known as SMA_Jurisdiction_Streams) was updated by the Department of Ecology, SEA Program, in January 2017, from the NHD Flowline data.</datacred>
+    </idinfo>
+    <metainfo>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>
