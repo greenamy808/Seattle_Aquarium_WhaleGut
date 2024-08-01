@@ -3,7 +3,7 @@ This repository contains all code and data associated with "Persistent Plastic: 
 
 <p float="left">
   <img src="images/SA.jpg" width="400" />
-  <img src="images/tomford.jpg" width="400" /> 
+  <img src="images/tomford2.jpg" width="400" /> 
 </p>
 
 <p float="left">
